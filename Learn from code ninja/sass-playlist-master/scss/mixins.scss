@@ -1,0 +1,78 @@
+//Mixings
+@mixin banner{
+	width: 100%;
+	position: relative;
+	color: white;
+	.banner-content{
+		position: absolute;
+		top: 50px;
+		width: 100%;
+	}
+	img{
+		width: 100%;
+	}
+	span{
+		font-size: $bannerHeading;
+		font-weight: bold;
+		display: block;
+		text-transform: uppercase;
+    //When we go to bigger screen our banner text looks short so we make
+    //it adoptable for larger and smaller screens
+    @include mQ(3000px, 1200px){
+      font-size: 40px;
+    }
+	}
+	span.title{
+		font-weight: normal;
+		margin-bottom: 30px;
+	}
+
+}
+
+
+
+@mixin clearFix{
+  &:after{
+    content: "";
+    display: block;
+    clear: both;
+  }
+}
+
+
+@mixin grid($cols, $margn){
+  float: left;
+  margin-right: $margn;
+  margin-bottom: $margn;
+  //the width should equaly divided to each element
+  width: ((100% - (($cols - 1)*$margn)) / $cols);
+  //this is get last child on each row <we want last element that it should not have a margin of $margn>
+  &:nth-child(#{$cols}n){
+    margin-right: 0;
+  }
+}
+
+
+//For mixin query
+@mixin mQ($arg){
+  @media screen and (max-width: $arg){
+    @content;       //when we call this mixin on the element we want to change at a particular max-width
+                    //we have to specify what content we want to pass in.
+  }
+}
+
+//If statement
+@mixin mQ($arg...){
+  @if length($arg) == 1{
+    @media screen and (max-width: nth($arg, 1)){
+      @content;       //when we call this mixin on the element we want to change at a particular max-width
+                    //we have to specify what content we want to pass in.
+    }
+
+   }
+   @if length($arg) == 2{
+     @media screen and (max-width: nth($arg, 1)) and (min-width: nth($arg,2 )){
+       @content;
+     }
+   }
+}
